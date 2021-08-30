@@ -2,27 +2,27 @@
   "tokens": [
     {
       "id": 0,
-      "description": "winking face",
-      "image": "https://openmoji.org/data/black/svg/1F609.svg",
-      "name": "face 0"
+      "description": "spade suit",
+      "image": "https://openmoji.org/data/color/svg/2660.svg",
+      "name": "0"
     },
     {
       "id": 1,
-      "description": "smiling face with heart-eyes",
-      "image": "https://openmoji.org/data/black/svg/1F60D.svg",
-      "name": "face 1"
+      "description": "heart suit",
+      "image": "https://openmoji.org/data/color/svg/2665.svg",
+      "name": "1"
     },
     {
       "id": 2,
-      "description": "upside-down face",
-      "image": "https://openmoji.org/data/black/svg/1F643.svg",
-      "name": "face 2"
+      "description": "diamond suit",
+      "image": "https://openmoji.org/data/color/svg/2666.svg",
+      "name": "2"
     },
     {
       "id": 3,
-      "description": "beaming face with smiling eyes",
-      "image": "https://openmoji.org/data/black/svg/1F601.svg",
-      "name": "face 3"
+      "description": "club suit",
+      "image": "https://openmoji.org/data/color/svg/2663.svg",
+      "name": "3"
     }
   ]
 }
