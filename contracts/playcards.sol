@@ -9,7 +9,6 @@ contract PlayCards is ERC721, Ownable {
 
     string private _baseTokenURI;
     uint256 public _totalSupply;
-    uint256 public _initialValue;
 
 
     constructor(
@@ -38,10 +37,17 @@ contract PlayCards is ERC721, Ownable {
 
 
     function _beforeTokenTransfer(uint256 tokenId) internal virtual override {
-        require(tokenId <= _totalSupply, "there are only 54 play cards!");
+        require(tokenId < _totalSupply, "there are only 54 play cards!");
     }
 
     function mint(address to, uint256 tokenId) public onlyOwner{
         _safeMint(to, tokenId);
+    }
+
+    function mintBatch(address[] memory to ,uint256[] memory tokenId) public onlyOwner {
+        uint256 n = to.length;
+        for (uint256 i = 0; i < n; i++) {
+            _safeMint(to[i], tokenId[i]);
+        }
     }
 }
