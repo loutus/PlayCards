@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.8.0;
+pragma solidity ^0.8.0;
 
 import "./ERC721.sol";
 import "./abstract/Ownable.sol";
@@ -9,6 +9,9 @@ contract PlayCards is ERC721, Ownable {
 
     string private _baseTokenURI;
     uint256 public _totalSupply;
+    uint256 public _initialValue;
+
+    mapping(address => uint256) public earnings;
 
 
     constructor(
@@ -20,6 +23,7 @@ contract PlayCards is ERC721, Ownable {
         _baseTokenURI = baseTokenURI;
         _totalSupply = totalSupply;
     }
+
 
     function supportsInterface(bytes4 interfaceId)
         public
@@ -44,10 +48,21 @@ contract PlayCards is ERC721, Ownable {
         _safeMint(to, tokenId);
     }
 
-    function mintBatch(address[] memory to ,uint256[] memory tokenId) public onlyOwner {
-        uint256 n = to.length;
-        for (uint256 i = 0; i < n; i++) {
-            _safeMint(to[i], tokenId[i]);
-        }
+    function setInitialValue(uint256 initialValue_) public onlyOwner {
+        _initialValue = initialValue_;
+    }
+
+
+    function getCard(uint256 tokenId) public payable{
+        require(msg.value >= _initialValue, "you have to pay at least equal to existing initial value");
+        _safeMint(_msgSender(), tokenId);
+        earnings[owner()] += msg.value;
+    }
+
+    function withdraw() public onlyOwner {
+        uint256 amount = earnings[_msgSender()];
+        earnings[_msgSender()] = 0;
+        address payable reciever = payable(_msgSender());
+        reciever.transfer(amount);
     }
 }

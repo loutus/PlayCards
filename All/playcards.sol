@@ -41,7 +41,7 @@ contract PlayCards is ERC721, Ownable {
 
 
     function _beforeTokenTransfer(uint256 tokenId) internal virtual override {
-        require(tokenId <= _totalSupply, "there are only 54 play cards!");
+        require(tokenId < _totalSupply, "there are only 54 play cards!");
     }
 
     function mint(address to, uint256 tokenId) public onlyOwner{
