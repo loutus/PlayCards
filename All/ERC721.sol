@@ -2,13 +2,13 @@
 
 pragma solidity >=0.8.0;
 
-import "./interface/IERC721.sol";
-import "./interface/IERC721Receiver.sol";
-import "./interface/IERC721Metadata.sol";
-import "./abstract/ERC165.sol";
-import "./abstract/Context.sol";
-import "./library/Strings.sol";
-import "./library/Address.sol";
+import "./IERC721.sol";
+import "./IERC721Receiver.sol";
+import "./IERC721Metadata.sol";
+import "./ERC165.sol";
+import "./Context.sol";
+import "./Strings.sol";
+import "./Address.sol";
 
 contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 

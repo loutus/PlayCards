@@ -2,6 +2,13 @@ const HDWalletProvider = require("truffle-hdwallet-provider");
 const { mnemonic, projectId} = require('./secret.json');
 
 module.exports = {
+
+  compilers: {
+    solc: {
+      version: "^0.8.0"
+    }
+  },
+  
   networks: {
     rinkeby: {
       provider: function() {
@@ -27,3 +34,4 @@ module.exports = {
     'truffle-plugin-verify'
   ]
 }
+
