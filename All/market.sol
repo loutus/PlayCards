@@ -126,12 +126,4 @@ function buyToken(uint tokenId) public payable {
         address payable reciever = payable(msg.sender);
         reciever.transfer(amount);
     }
-    
-    function ownerOf(uint256 tokenId) public view returns(address) {
-        return PlayCards.ownerOf(tokenId);
-    } 
-    
-    function balanceOf(address owner_) public view returns(uint256) {
-        return PlayCards.balanceOf(owner_);
-    } 
 }
