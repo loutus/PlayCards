@@ -2,11 +2,11 @@
 
 pragma solidity >=0.8.0;
 
-import "./playcards.sol";
+import "./IERC721.sol";
 
 contract Market{
 
-    PlayCards public pc;
+    IERC721 public PlayCards;
 
     struct Offer {
         bool isForSale;
@@ -33,24 +33,24 @@ contract Market{
     event TokenBought(uint indexed id, uint value, address indexed fromAddress, address indexed toAddress);
     event TokenNoLongerForSale(uint indexed Id);
 
-    constructor(){
-        pc = new PlayCards("play cards", "pc", "https://my-json-server.typicode.com/loutus/PlayCards/Tokens/", 54);
+    constructor(address tokenContractAddress){
+        PlayCards = IERC721(tokenContractAddress);
     }
 
     function offerTokenForSale(uint256 tokenId, uint256 minSalePriceInWei) public {
-        require(pc.ownerOf(tokenId) == msg.sender, "market: you are not owner of this token");
+        require(PlayCards.ownerOf(tokenId) == msg.sender, "market: you are not owner of this token");
         tokensOfferedForSale[tokenId] = Offer(true, tokenId, msg.sender, minSalePriceInWei, address(0));
         emit TokenOffered(tokenId, minSalePriceInWei, address(0));
     }
 
     function offerTokenForSaleToAddress(uint256 tokenId, uint256 minSalePriceInWei, address toAddress) public {
-        require(pc.ownerOf(tokenId) == msg.sender, "market: you are not owner of this token");
+        require(PlayCards.ownerOf(tokenId) == msg.sender, "market: you are not owner of this token");
         tokensOfferedForSale[tokenId] = Offer(true, tokenId, msg.sender, minSalePriceInWei, toAddress);
         emit TokenOffered(tokenId, minSalePriceInWei, toAddress);
     }
 
     function tokenNoLongerForSale(uint256 tokenId) public {
-        require(pc.ownerOf(tokenId) == msg.sender, "market: you are not owner of this token");
+        require(PlayCards.ownerOf(tokenId) == msg.sender, "market: you are not owner of this token");
         tokensOfferedForSale[tokenId] = Offer(false, tokenId, msg.sender, 0, address(0));
         emit TokenNoLongerForSale(tokenId);
     }
@@ -62,11 +62,11 @@ function buyToken(uint tokenId) public payable {
             revert("Market: not supposed to be sold to this user");
         }
         require(msg.value >= offer.minValue, "not enough eth");
-        require(offer.seller == pc.ownerOf(tokenId), "seller no longer owner of token");
+        require(offer.seller == PlayCards.ownerOf(tokenId), "seller no longer owner of token");
 
         address seller = offer.seller;
 
-        pc.safeTransferFrom(seller, msg.sender, tokenId);
+        PlayCards.safeTransferFrom(seller, msg.sender, tokenId);
         pendingWithdrawals[seller] += msg.value;
         tokenNoLongerForSale(tokenId);
         emit TokenBought(tokenId, msg.value, seller, msg.sender);
@@ -82,7 +82,7 @@ function buyToken(uint tokenId) public payable {
     }
 
     function enterBidForToken(uint tokenId) public payable {
-        require(pc.ownerOf(tokenId) != msg.sender, "you already owned this token");
+        require(PlayCards.ownerOf(tokenId) != msg.sender, "you already owned this token");
         require(msg.value != 0, "zero bid value");
         Bid memory existing = tokenBids[tokenId];
         require(msg.value >= existing.value, "you have to bid at least equal to existing bid");
@@ -95,7 +95,7 @@ function buyToken(uint tokenId) public payable {
     }
 
     function withdrawBidForToken(uint tokenId) public {
-        require(pc.ownerOf(tokenId) != msg.sender, "you already owned this token");
+        require(PlayCards.ownerOf(tokenId) != msg.sender, "you already owned this token");
         Bid memory bid = tokenBids[tokenId];
         require(bid.bidder == msg.sender, "you have not bid for this token");
         
@@ -107,12 +107,12 @@ function buyToken(uint tokenId) public payable {
     }
 
     function acceptBidForToken(uint tokenId, uint minPrice) public {
-        require(pc.ownerOf(tokenId) == msg.sender, "market: you are not owner of this token");
+        require(PlayCards.ownerOf(tokenId) == msg.sender, "market: you are not owner of this token");
         Bid memory bid = tokenBids[tokenId];
         require(bid.value != 0, "there is no bid for this token");
         require(bid.value >= minPrice, "the bid value is lesser than minPrice");
         address seller = msg.sender;
-        pc.safeTransferFrom(seller, bid.bidder, tokenId);
+        PlayCards.safeTransferFrom(seller, bid.bidder, tokenId);
 
         tokensOfferedForSale[tokenId] = Offer(false, tokenId, bid.bidder, 0, address(0));
         tokenBids[tokenId] = Bid(false, tokenId, address(0), 0);
@@ -126,4 +126,12 @@ function buyToken(uint tokenId) public payable {
         address payable reciever = payable(msg.sender);
         reciever.transfer(amount);
     }
+    
+    function ownerOf(uint256 tokenId) public view returns(address) {
+        return PlayCards.ownerOf(tokenId);
+    } 
+    
+    function balanceOf(address owner_) public view returns(uint256) {
+        return PlayCards.balanceOf(owner_);
+    } 
 }
