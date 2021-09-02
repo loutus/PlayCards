@@ -34,6 +34,7 @@ contract Market{
     event TokenNoLongerForSale(uint indexed Id);
 
     constructor(address tokenContractAddress){
+        // PlayCards = new PlayCards("play cards", "PlayCards", "https://my-json-server.typicode.com/loutus/PlayCards/Tokens/", 54);
         PlayCards = IERC721(tokenContractAddress);
     }
 
@@ -126,12 +127,4 @@ function buyToken(uint tokenId) public payable {
         address payable reciever = payable(msg.sender);
         reciever.transfer(amount);
     }
-    
-    function ownerOf(uint256 tokenId) public view returns(address) {
-        return PlayCards.ownerOf(tokenId);
-    } 
-    
-    function balanceOf(address owner_) public view returns(uint256) {
-        return PlayCards.balanceOf(owner_);
-    } 
 }
