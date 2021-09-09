@@ -2,7 +2,7 @@
 
 pragma solidity >=0.8.0;
 
-contract game{
+contract BuySpeceficCard{
 
 
     struct User {
