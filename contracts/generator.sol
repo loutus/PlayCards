@@ -2,51 +2,30 @@
 
 pragma solidity >=0.8.0;
 
-import "./buySpeceficCard.sol";
+import "./game.sol";
 
 contract Generator{
 
-    BuySpeceficCard public buyer;
+    Game public buyer;
     
-    constructor() {
-        buyer = new BuySpeceficCard();
+    constructor(uint256 set_x, uint256 set_y) {
+        buyer = new Game(set_x, set_y);
     }
 
-    function _resetBuyerContract() public{
-        buyer = new BuySpeceficCard();
+    function resetBuyerContract(uint256 set_x, uint256 set_y) public{
+        buyer = new Game(set_x, set_y);
     }
-
-    function _signIn(string memory _username) public {
+    
+    
+    function _signIn(string memory _username) public{
         buyer.signIn(_username);
     }
-
-
-    function _buyCard(uint256 cardNumber) public {
-        buyer.buyCard(cardNumber);
+    
+    function _buyCards(uint256 _numberOfCards) public {
+        buyer.buyCards(_numberOfCards);
     }
     
-
-    function _getAllUsernames() public view {
-        buyer.getAllUsernames();
-    }
-    function _getUserName() public view {
-        buyer.getUserName();
-    }
-    function _getUserCards() public view {
-        buyer.getUserCards();
-    }
-
-
-    function _getAllCards() public view {
-        buyer.getAllCards();
-    }
-    function _getCardOwner(uint256 cardNumber) public view {
-        buyer.getCardOwner(cardNumber);
-    }
-    function _cardHasSelected(uint256 cardNumber) public view {
-        buyer.cardHasSelected(cardNumber);
-    }
-    function _getCardSides(uint256 cardNumber) public view {
-        buyer.getCardSides(cardNumber);
+    function _remaining() public view returns(uint256) {
+        return buyer.cardsRemaining();
     }
 }

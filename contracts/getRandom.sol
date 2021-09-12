@@ -2,7 +2,7 @@
 
 pragma solidity >=0.8.0;
 
-contract Game{
+contract game{
 
     struct User {
         bool signIn;
@@ -22,8 +22,8 @@ contract Game{
     uint256 x;
     uint256 y;
 
-    event SignIn(address indexed addr, string username);
-    event BuyCards(address indexed buyer, uint256[5] cardsNumber);
+    event SignIn(address index addr, string memory username);
+    event Buy(address indexed buyer, uint256 cardNumber);
 
     constructor (uint256 _x, uint256 _y) {
         x = _x;
@@ -39,9 +39,22 @@ contract Game{
 
         user.signIn = true;
         user.username = _username;
-        
-        emit SignIn(msg.sender, _username);
     }
+
+    function buyCard(uint256 cardNumber) public {
+        User storage user = users[msg.sender];
+        Card storage card = cards[cardNumber];
+
+        require(user.signIn, "you have not sign in yet");
+        require(cardsRemaining > 0, "all cards assigned");
+        require(!card.selected, "card hase been selected before");
+
+        user.cards.push(cardNumber);
+        card.selected = true;
+        card.owner = msg.sender;
+
+    }
+    
 
 
     function buyCards(uint256 numberOfCards) public returns(uint256[5] memory) {
@@ -67,10 +80,6 @@ contract Game{
             tokenIds[i] = lastCard;
         }
 
-
-
-        emit BuyCards(msg.sender, tokenIds);
-
         return tokenIds;
     }
 
@@ -90,16 +99,10 @@ contract Game{
         } while(counter <= randIndex);
         selectedCard --;
 
-
-        User storage user = users[msg.sender];
-        Card storage card = cards[selectedCard];
-
         //make sure the card would not be selected again
-        card.selected = true;
         cardsRemaining --;
+        cards[selectedCard].selected = true;
         
-        user.cards.push(selectedCard);
-        card.owner = msg.sender;
 
         return selectedCard;
     }
@@ -146,15 +149,9 @@ contract Game{
             selectedCard = sidesAvailable[randIndex];
         }
         
-        User storage user = users[msg.sender];
-        Card storage card = cards[selectedCard];
-
         //make sure the card would not be selected again
-        card.selected = true;
         cardsRemaining --;
-        
-        user.cards.push(selectedCard);
-        card.owner = msg.sender;
+        cards[selectedCard].selected = true;
         
         
         return selectedCard;
@@ -192,5 +189,7 @@ contract Game{
     function getCardOwner(uint256 cardNumber) public view returns(address) {
         return cards[cardNumber].owner;
     }
-
+    function cardHasSelected(uint256 cardNumber) public view returns(bool) {
+        return cards[cardNumber].selected;
+    }
 }

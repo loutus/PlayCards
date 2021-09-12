@@ -10,6 +10,7 @@ contract BuySpeceficCard{
         string username;
         uint256[] cards;
     }
+    
 
     struct Card {
         bool selected;
@@ -17,7 +18,10 @@ contract BuySpeceficCard{
         uint256[] sideCards;
     }
 
-
+    mapping(address => User) users;
+    mapping(uint256 => Card) cards;
+    
+    uint256 totalSupply;
     uint256 cardsRemaining;
 
     string[] _allUsers;
@@ -25,12 +29,10 @@ contract BuySpeceficCard{
     //test
     Card[] _allcards;
 
-    mapping(address => User) users;
-    mapping(uint256 => Card) cards;
-
 
     constructor(){
-        cardsRemaining = 10;
+        totalSupply = 10;
+        cardsRemaining = totalSupply;
         //test
         for(uint i = 0; i < cardsRemaining; i++) {
             _allcards.push(cards[i]);
@@ -61,6 +63,7 @@ contract BuySpeceficCard{
         card.owner = msg.sender;
         
         _allcards[cardNumber] = card;
+        cardsRemaining --;
     }
     
 
