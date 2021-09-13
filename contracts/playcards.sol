@@ -40,9 +40,9 @@ contract PlayCards is ERC721, Ownable {
         require(tokenId < _totalSupply, "there are only 54 play cards!");
     }
 
-    // function mint(address to, uint256 tokenId) public onlyOwner{
-    //     _safeMint(to, tokenId);
-    // }
+    function mint(address to, uint256 tokenId) public onlyOwner{
+        _safeMint(to, tokenId);
+    }
 
     // function mintBatch(address[] memory to ,uint256[] memory tokenId) public onlyOwner {
     //     uint256 n = to.length;
@@ -51,9 +51,9 @@ contract PlayCards is ERC721, Ownable {
     //     }
     // }
 
-    function mint(address to, uint256[] memory tokenId) public onlyOwner {
-        for(uint256 i = 0; i < tokenId.length; i++) {
-            _safeMint(to, tokenId[i]);
-        }
-    }
+    // function mint(address to, uint256[] memory tokenId) public onlyOwner {
+    //     for(uint256 i = 0; i < tokenId.length; i++) {
+    //         _safeMint(to, tokenId[i]);
+    //     }
+    // }
 }

@@ -19,11 +19,11 @@ contract Game{
     mapping(uint256 => Card) cards;
 
     uint256 public cardsRemaining;
-    uint256 x;
-    uint256 y;
+    uint256 public x;
+    uint256 public y;
 
     event SignIn(address indexed addr, string username);
-    event BuyCards(address indexed buyer, uint256[5] cardsNumber);
+    event BuyCard(address indexed buyer, uint256 cardNumber);
 
     constructor (uint256 _x, uint256 _y) {
         x = _x;
@@ -44,7 +44,7 @@ contract Game{
     }
 
 
-    function buyCards(uint256 numberOfCards) public returns(uint256[5] memory) {
+    function buyCards(uint256 numberOfCards) public {
         User storage user = users[msg.sender];
         // Card storage card = cards[cardNumber];
         
@@ -55,23 +55,21 @@ contract Game{
 
 
         //array of cards selected
-        uint256[5] memory tokenIds;
+        // uint256[5] memory tokenIds;
 
         //first card will be selected by random
         uint256 lastCard = randomCard();
-        tokenIds[0] = lastCard;
+        // tokenIds[0] = lastCard;
+        emit BuyCard(msg.sender, lastCard);
+
 
         //other cards will be selected near to last card
         for(uint i=1; i < numberOfCards; i++){
             lastCard = randomSide(lastCard);
-            tokenIds[i] = lastCard;
+            // tokenIds[i] = lastCard;
+            emit BuyCard(msg.sender, lastCard);
         }
-
-
-
-        emit BuyCards(msg.sender, tokenIds);
-
-        return tokenIds;
+        // return tokenIds;
     }
 
 

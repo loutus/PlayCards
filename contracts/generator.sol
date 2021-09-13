@@ -1,31 +1,35 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.8.0;
+pragma solidity ^0.8.0;
 
 import "./game.sol";
 
 contract Generator{
 
-    Game public buyer;
-    
-    constructor(uint256 set_x, uint256 set_y) {
-        buyer = new Game(set_x, set_y);
-    }
+    Game public game;
 
-    function resetBuyerContract(uint256 set_x, uint256 set_y) public{
-        buyer = new Game(set_x, set_y);
+    function resetGameContract(uint256 set_x, uint256 set_y) public{
+        game = new Game(set_x, set_y);
     }
     
     
     function _signIn(string memory _username) public{
-        buyer.signIn(_username);
+        game.signIn(_username);
     }
     
     function _buyCards(uint256 _numberOfCards) public {
-        buyer.buyCards(_numberOfCards);
+        game.buyCards(_numberOfCards);
     }
     
     function _remaining() public view returns(uint256) {
-        return buyer.cardsRemaining();
+        return game.cardsRemaining();
+    }
+    
+    function _x() public view returns(uint256) {
+        return game.x();
+    }
+    
+    function _y() public view returns(uint256) {
+        return game.y();
     }
 }
