@@ -6,7 +6,7 @@ import "./game.sol";
 
 contract Generator{
 
-    Game public game;
+    Game game;
 
     function resetGameContract(uint256 set_x, uint256 set_y) public{
         game = new Game(set_x, set_y);
